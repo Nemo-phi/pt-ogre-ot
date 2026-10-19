@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pt-ogre-ot"
+version = "0.1.0"
+description = "Computational Optimal Transport Research Project"
+requires-python = ">=3.10"
+
+dependencies = [
+    "numpy",
+    "scipy",
+    "matplotlib"
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest",
+    "jupyterlab"
+]
+
+[tool.setuptools.packages.find]
+include = ["otlib*"]
