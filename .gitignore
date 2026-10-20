@@ -25,3 +25,13 @@ dist/
 # Editor
 .vscode/
 .idea/
+
+# LaTeX temporary files
+proofs/build/
+*.aux
+*.log
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.bcf
+*.run.xml
