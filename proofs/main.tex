@@ -1,0 +1,39 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+
+\title{Computational Optimal Transport\\
+Theoretical Notes and Proofs}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section{Discrete Optimal Transport}
+\subsection{Kantorovich Linear Programming}
+
+Let $a\in\mathbb{R}_+^n$ and
+$b\in\mathbb{R}_+^m$ have equal total mass.
+
+Define
+\[
+U(a,b)=
+\left\{
+P\geq0:
+P\mathbf{1}_m=a,\;
+P^\top\mathbf{1}_n=b
+\right\}.
+\]
+
+The Kantorovich problem is
+\[
+\min_{P\in U(a,b)}\langle C,P\rangle.
+\]
+
+\end{document}
