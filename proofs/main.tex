@@ -29,7 +29,8 @@
 
 \title{Computational Optimal Transport\\
 Theoretical Notes and Proofs}
-\date{}
+\date{\today}
+\author{}
 
 \begin{document}
 
@@ -43,32 +44,114 @@ and \cite{santambrogio2015optimal}.
 
 \subsection{Kantorovich Problem}
 
-Let $a\in\mathbb{R}_+^n$ and
-$b\in\mathbb{R}_+^m$ have equal total mass.
+Let $n,m\geq 1$ and let$a\in\mathbb{R}_+^n$ and $b\in\mathbb{R}_+^m$ satisfy
+\[\sum_{i=1}^{n}a_i=\sum_{j=1}^{m}b_j=M>0.\]
 
-Define the transport polytope
-\[
-U(a,b)=
-\left\{
-P\in\mathbb{R}_+^{n\times m}:
-P\mathbf{1}_m=a,\;
-P^\top\mathbf{1}_n=b
-\right\}.
-\]
+\begin{definition}[Transport Polytope]
+The transport polytope associated with $(a,b)$ is 
+\[ U(a,b) = \left\{P\in\mathbb{R}_+^{n\times m} : P\mathbf{1}_m = a, P^\top \mathbf{1}_n = b\right\}. \]
+\end{definition}
 
-\begin{theorem}
-There exists an optimal extreme point
-$P^*\in U(a,b)$ satisfying
-\[
-|\operatorname{supp}(P^*)|
-\leq n+m-1.
-\]
+Given a finite cost matrix $C\in\mathbb{R}^{n\times m}$, the discrete Kantorovich problem is
+\begin{equation}
+\label{eq:kantorovich}
+\min_{P\in U(a,b)} \langle P, C\rangle = \sum_{i=1}^{n}\sum_{j=1}^{m}P_{ij}C_{ij}.
+\end{equation}
+
+\begin{lemma}
+    \label{lem:transport-polytype}
+    The transport polytope $U(a,b)$ is a non-empty, compact, convex polytope.
+\end{lemma}
+
+\begin{proof}
+    We establish the assertions separately.
+
+    \emph{Nonemptiness.}
+    Define 
+    \[ P^{(0)} = \frac{ab^\top}{M}. \]
+    Since $a,b\geq 0$, we have $P^{(0)}\geq 0$. Moreover, we have
+    \[ P^{(0)}\mathbf{1}_m = \frac{a(b^\top\mathbf{1}_m)}{M} = a, \]
+    and
+    \[ (P^{(0)})^\top\mathbf{1}_n = \frac{b(a^\top\mathbf{1}_n)}{M} = b. \]
+    Hence, $P^{(0)}\in U(a,b)$, and $U(a,b)$ is non-empty.
+
+    \emph{Convexity.}
+    Let $P_1,P_2\in U(a,b)$ and $\lambda\in[0,1]$. Then, we set 
+    \[ Q = \lambda P_1 + (1-\lambda)P_2. \] 
+    Then $Q\geq 0$ and
+    \[ Q\mathbf{1}_m = \lambda P_1\mathbf{1}_m + (1-\lambda)P_2\mathbf{1}_m = \lambda a + (1-\lambda)a = a, \]
+    and similarly,
+    \[ Q^\top\mathbf{1}_n = b. \]
+    Hence, $Q\in U(a,b)$, and $U(a,b)$ is convex.
+
+    \emph{Compactness.}
+    For any $P\in U(a,b)$, nonegativity and the marginal constraints imply that
+    \[ 0\leq P_{ij}\leq \min(a_i,b_j) \quad \forall i,j. \]
+    Hence, $U(a,b)$ is bounded. 
+    Since $U(a,b)$ is defined by a finite number of linear equalities and inequalities, 
+    it is closed. Therefore, $U(a,b)$ is compact.
+
+    Finally, since $U(a,b)$ is a non-empty, compact, convex set defined by linear inequalities, it is a convex polytope.
+\end{proof}
+
+\subsection{Extreme Points and Sparse Optimal Plans}
+
+\begin{theorem}[Existence of Sparse Optimal Plans]
+    \label{thm:sparse-optimal-plan}
+    Let $a\in\mathbb{R}_+^n$ and $b\in\mathbb{R}_+^m$ have the same positive total mass,
+    and let $C\in\mathbb{R}^{n\times m}$ be a cost matrix. 
+
+    Then the Kantorovich problem \eqref{eq:kantorovich} admits an optimal solution 
+    $P^\star\in U(a,b)$ which is an extreme point of the transport polytope $U(a,b)$.
+    and satisfies
+    \[\left|\operatorname{supp}(P^*)\right|\leq n+m-1.\]
 \end{theorem}
 
 \begin{proof}
-The proof will be provided in Task 1.1.
+    We first establish the rank of the linear constraints matrix.
+
+    Let $p=\operatorname{vec}(P)\in\mathbb{R}^{nm}$ be the row-wise vectorization 
+    of $P$. The marginal constraints can be expressed as a linear system 
+    $Ap = \begin{pmatrix} a \\ b \end{pmatrix}$, where $A\in\mathbb{R}^{(n+m)\times nm}$.
+    
+    The column of $A$ associated with the variable $P_{ij}$ is 
+    \[ A_{ij} = \begin{pmatrix} e_i^{(n)} \\ e_j^{(m)} \end{pmatrix}.\]
+
+    We claim that the rank of $A$ is $n+m-1$.
+
+    Indeed, let $(\lambda, \mu)\in\mathbb{R^n}\times\mathbb{R^m}$ satisfy
+    \[(\lambda^\top, \mu^\top)A = 0.\]
+    By the definition of $A$, this implies that $\lambda_i + \mu_j = 0$ for all $i,j$.
+    Consequently, there exists $t\in\mathbb{R}$ such that $\lambda_i = t\mathbf{1}_n$
+    and $\mu_j = -t\mathbf{1_m}$. Thus the left null space of $A$ is one-dimensional, 
+    and the rank of $A$ is $n+m-1$.
+
+    Now let $P\in U(a,b)$ be an extreme point and set 
+    \[S=\operatorname{supp}(P)=\{(i,j):P_{ij}>0\}.\]
+
+    Suppose for contradiction that $|S|\geq n+m$. 
+    Since the columns of $A$ indexed by $S$ outnumber the rank of $A$, 
+    they are linearly dependent.
+
+    Hence there exists a non-zero $H\in\mathbb{R}^{n\times m}$ 
+    such that \[\operatorname{supp}(H)\subseteq S\] and 
+    \[H\mathbf{1}_m=0,\qquad H^\top\mathbf{1}_n=0.\]
+
+    Since $P_{ij}>0$ for all $(i,j)\in S$, there exists $\epsilon>0$ such that
+    \[ P\pm\epsilon H\geq 0. \] Moreover, 
+    \[ (P\pm\epsilon H)\mathbf{1}_m = a, \qquad (P\pm\epsilon H)^\top\mathbf{1}_n = b.\]
+    Therefore both $P+\epsilon H$ and $P-\epsilon H$ belong to $U(a,b)$.
+
+    Since $H\neq 0$, we have $P+\epsilon H\neq P-\epsilon H$.
+    But $P = \frac{1}{2}(P+\epsilon H) + \frac{1}{2}(P-\epsilon H)$, 
+    which contradicts the assumption that $P$ is an extreme point.
+    Therefore every extreme point $P\in U(a,b)$ satisfies 
+    $|\operatorname{supp}(P)|\leq n+m-1$.
+
+    Finally, by lemma \ref{lem:transport-polytype}, $U(a,b)$ is a non-empty, compact, convex polytope.
+    A linear functional attains its minimum over a non-empty, compact, convex polytope at an extreme point.
+    Thus there exists an optimal extreme point $P^\star\in U(a,b)$, and 
+    \[|\operatorname{supp}(P^\star)|\leq n+m-1.\]
 \end{proof}
-
-\printbibliography
-
+    
 \end{document}
