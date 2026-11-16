@@ -23,6 +23,7 @@
 \newtheorem{lemma}[theorem]{Lemma}
 \newtheorem{proposition}[theorem]{Proposition}
 \newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{remark}[theorem]{Remark}
 
 \theoremstyle{definition}
 \newtheorem{definition}[theorem]{Definition}
@@ -153,5 +154,341 @@ Given a finite cost matrix $C\in\mathbb{R}^{n\times m}$, the discrete Kantorovic
     Thus there exists an optimal extreme point $P^\star\in U(a,b)$, and 
     \[|\operatorname{supp}(P^\star)|\leq n+m-1.\]
 \end{proof}
-    
+
+\subsection{The Birkhoff--von Neumann Theorem}
+
+We now consider the special case of the transport polytope where $n=m$ and $a=b=\mathbf{1}_n$. 
+In this case, the transport polytope is known as the Birkhoff polytope.
+\[\mathcal{B}_n = \left\{Q\in\mathbb{R}_+^{n\times n}:Q\mathbf{1}_n=\mathbf{1}_n,\;
+Q^\top\mathbf{1}_n=\mathbf{1}_n\right\}.\]
+
+The matrices in $\mathcal{B}_n$ are known as doubly stochastic matrices. By the change of variables $Q = nP$,
+we have $U(a,b)=\frac{1}{n}\mathcal{B}_n$.
+
+\begin{theorem}[Birkhoff--von Neumann]
+\label{thm:birkhoff}
+The extreme points of $\mathcal{B}_n$ are precisely the permutation matrices.
+Consequently,
+\[
+\mathcal{B}_n
+=\operatorname{conv}
+\left\{\Pi_\pi:\pi\in S_n\right\},
+\]
+where $\Pi_\pi$ denotes the permutation matrix associated with $\pi\in S_n$.
+\end{theorem}
+
+\begin{proof}
+We prove the characterization of extreme points in both directions.
+
+\medskip
+\noindent
+\textit{Step 1: Every extreme point is a permutation matrix.}
+
+Let $Q$ be an extreme point of $\mathcal{B}_n$.
+
+Consider its bipartite support graph
+$G(Q)=(X\sqcup Y,E)$, where
+\[ X=\{x_1,\ldots,x_n\},\qquad Y=\{y_1,\ldots,y_n\},\]
+and
+\[(x_i,y_j)\in E\quad\Longleftrightarrow\quad Q_{ij}>0.\]
+
+We first show that $G(Q)$ contains no cycles. Suppose, for contradiction, that
+$G(Q)$ contains a cycle. Since $G(Q)$ is bipartite, every cycle has even length.
+
+Assign alternating values $+1$ and $-1$ to the entries corresponding to the
+edges of this cycle, and zero elsewhere. This defines a nonzero matrix
+$H\in\mathbb{R}^{n\times n}$ satisfying
+\[
+H\mathbf{1}_n=0,\qquad H^\top\mathbf{1}_n=0.
+\]
+
+All entries of $Q$ on the cycleare strictly positive. Therefore, for sufficiently small
+$\delta>0$, we have
+\[Q+\delta H\geq 0,\qquad Q-\delta H\geq 0.\]
+
+Moreover,
+\[(Q\pm\delta H)\mathbf{1}_n=\mathbf{1}_n,\]
+and
+\[(Q\pm\delta H)^\top\mathbf{1}_n=\mathbf{1}_n.\]
+Hence both $Q+\delta H$ and $Q-\delta H$ belong to $\mathcal{B}_n$.
+Since $H\neq0$, these matrices are distinct, while
+\[Q=\frac12(Q+\delta H)+\frac12(Q-\delta H).\]
+This contradicts the extremality of $Q$. Thus $G(Q)$ is a forest.
+Every connected component of this forest containing an edge has a leaf.
+
+Suppose first that such a leafis a left vertex $x_i$, whose unique neighbor is $y_j$.
+Then \[Q_{ik}=0\qquad\text{for all }k\neq j.\]
+Since the $i$-th row sums to one,\[Q_{ij}=1.\]
+As the $j$-th column also sums to oneand all entries are nonnegative,
+\[Q_{kj}=0\qquad\text{for all }k\neq i.\]
+Thus the edge $(x_i,y_j)$ forms an isolated matching pair.
+If the leaf is a right vertex,the same conclusion followsby exchanging rows and columns.
+
+Remove the corresponding row and column from $Q$. The remaining $(n-1)\times(n-1)$
+matrix is again doubly stochastic, and its support graph is a forest.
+Repeating this argument inductively shows that $Q$ has exactly one entry equal to one in each row
+and column, with all other entries zero. Therefore $Q$ is a permutation matrix.
+
+\medskip
+\noindent
+\textit{Step 2: Every permutation matrixis an extreme point.}
+
+Let $\Pi$ be a permutation matrix. Then there exists $\pi\in S_n$ such that
+\[\Pi_{ij}=
+\begin{cases}
+1, & j=\pi(i),\\
+0, & j\neq\pi(i).
+\end{cases}
+\]
+
+Suppose\[\Pi=\lambda Q+(1-\lambda)R,\] where $Q,R\in\mathcal{B}_n$ and $\lambda\in(0,1)$.
+For every $j\neq\pi(i)$, we have $\Pi_{ij}=0$, hence
+\[0=\lambda Q_{ij}+(1-\lambda)R_{ij}.\]
+Since $Q_{ij},R_{ij}\geq0$and both coefficients are strictlypositive, it follows that
+\[Q_{ij}=R_{ij}=0\qquad(j\neq\pi(i)).\]
+Since each row of $Q$ and $R$ sums to one, we obtain
+\[Q_{i,\pi(i)}=R_{i,\pi(i)}=1.\]
+Consequently,
+\[Q=R=\Pi.\]
+Therefore $\Pi$ is an extreme pointof $\mathcal{B}_n$.
+
+We conclude that
+\[\operatorname{Ext}(\mathcal{B}_n)=\{\Pi_\pi:\pi\in S_n\}.\]
+
+Finally, every nonempty compactpolytope is the convex hull ofits extreme points. Hence
+\[\mathcal{B}_n=\operatorname{conv}\{\Pi_\pi:\pi\in S_n\}.\]
+\end{proof}
+
+\begin{corollary}[Permutation-type optimal plan]
+\label{cor:permutation-optimal}
+Suppose $n=m$ and\[a=b=\frac1n\mathbf{1}_n.\]
+Then the Kantorovich problem admitsan optimal transport plan of the form
+\[P^*=\frac1n\Pi_{\pi^*},\]where $\Pi_{\pi^*}$ is a permutation matrix.
+\end{corollary}
+
+\begin{proof}
+Since the Kantorovich objective \[P\longmapsto\langle C,P\rangle\]
+is linear and $U(a,b)$ is a nonempty compact polytope,
+an optimal solution exists at an extreme point.
+
+By Theorem~\ref{thm:birkhoff}, every extreme point of
+\[U(a,b)=\frac1n\mathcal{B}_n\] is of the form
+\[P=\frac1n\Pi_\pi \] for some $\pi\in S_n$.
+
+Therefore, there exists an optimal permutation $\pi^*$ satisfying
+\[\pi^*\in\operatorname*{arg\,min}_{\pi\in S_n}\sum_{i=1}^n C_{i,\pi(i)},\]
+and
+\[P^*=\frac1n\Pi_{\pi^*}.\]
+\end{proof}
+
+\section{Kantorovich Duality}
+\subsection{Derivation of the Dual Problem}
+
+Recall the discrete Kantorovich problem
+\begin{equation}
+\label{eq:primal-ot}
+\begin{aligned}
+\min_{P\in\mathbb{R}_+^{n\times m}}
+\quad & \langle C,P\rangle\\
+\text{subject to}\quad
+& P\mathbf{1}_m=a,\\
+& P^\top\mathbf{1}_n=b,
+\end{aligned}
+\end{equation}
+where $a\in\mathbb{R}_+^n$ and $b\in\mathbb{R}_+^m$ have equal positive
+total mass and $C\in\mathbb{R}^{n\times m}$ is a finite cost matrix.
+
+Introduce Lagrange multipliers$f\in\mathbb{R}^n$ and $g\in\mathbb{R}^m$ for the two sets of marginal constraints.
+The Lagrangian is
+\[
+\begin{aligned}
+L(P,f,g)={}&\langle C,P\rangle+\langle f,a-P\mathbf{1}_m\rangle +\langle g,b-P^\top\mathbf{1}_n\rangle.
+\end{aligned}
+\]
+Rearranging the terms gives
+\[
+L(P,f,g)=\langle a,f\rangle+\langle b,g\rangle +\sum_{i=1}^n\sum_{j=1}^m (C_{ij}-f_i-g_j)P_{ij}.
+\]
+
+The dual function is defined by \[q(f,g)=\inf_{P\geq0}L(P,f,g).\]
+Therefore, the Kantorovich dual problem is
+\begin{equation}
+\label{eq:dual-ot}
+\begin{aligned}
+\max_{f\in\mathbb{R}^n,\,
+      g\in\mathbb{R}^m}
+\quad&
+\langle a,f\rangle+\langle b,g\rangle\\
+\text{subject to}\quad&
+f_i+g_j\leq C_{ij}
+\quad\text{for all }i,j.
+\end{aligned}
+\end{equation}
+
+\subsection{Weak Duality}
+
+\begin{proposition}[Weak duality]
+\label{prop:weak-duality}
+For every primal feasible
+$P\in U(a,b)$ and every dual feasible
+pair $(f,g)$,
+\[
+\langle a,f\rangle+\langle b,g\rangle
+\leq \langle C,P\rangle.
+\]
+\end{proposition}
+
+\begin{proof}
+Since $(f,g)$ is dual feasible,
+\[
+f_i+g_j\leq C_{ij}
+\qquad\text{for all }i,j.
+\]
+Multiplying by $P_{ij}\geq0$ and summing over all indices yields
+\[
+\sum_{i,j}(f_i+g_j)P_{ij}\leq\sum_{i,j}C_{ij}P_{ij}.
+\]
+Using the marginal constraints,
+\[
+\begin{aligned}
+\sum_{i,j}(f_i+g_j)P_{ij}
+&=\sum_i f_i\sum_jP_{ij}+\sum_jg_j\sum_iP_{ij}\\
+&=\sum_i a_if_i+\sum_jb_jg_j.
+\end{aligned}
+\]
+Consequently,
+\[
+\langle a,f\rangle+\langle b,g\rangle\leq\langle C,P\rangle.
+\]
+\end{proof}
+
+\subsection{Strong Duality}
+
+\begin{theorem}[Strong Kantorovich duality]
+\label{thm:strong-duality}
+Let $a\in\mathbb{R}_+^n$ and$b\in\mathbb{R}_+^m$ have the same
+positive total mass, and let$C\in\mathbb{R}^{n\times m}$.
+Then the primal and dual problems\eqref{eq:primal-ot} and \eqref{eq:dual-ot} both attain
+their optimal values, and
+\[
+\min_{P\in U(a,b)}\langle C,P\rangle=
+\max_{\substack{f\in\mathbb{R}^n,\,
+g\in\mathbb{R}^m\\
+f_i+g_j\leq C_{ij}}}
+\left(
+\langle a,f\rangle+\langle b,g\rangle
+\right).
+\]
+\end{theorem}
+
+\begin{proof}
+By the compactness and nonemptinessof $U(a,b)$ established previously,
+the primal problem admits an optimal solution $P^*$.
+
+Let $p^*=\operatorname{vec}(P^*)$,$c=\operatorname{vec}(C)$, and write
+the marginal constraints as
+\[
+Ap=d,\qquad d=
+\begin{pmatrix}
+a\\b
+\end{pmatrix}.
+\]
+Define the index sets
+\[ I=\{k:p_k^*>0\}, \qquad Z=\{k:p_k^*=0\}. \]
+Consider the cone of feasible directions
+\[
+\mathcal{D}=\left\{h\in\mathbb{R}^{nm}:Ah=0,\; h_k\geq0\ \text{for }k\in Z\right\}.
+\]
+For any $h\in\mathcal{D}$,there exists a sufficiently small
+$t>0$ such that
+\[
+p^*+th\geq0,
+\qquad
+A(p^*+th)=d.
+\]
+
+Since $p^*$ is optimal,
+\[
+c^\top(p^*+th)\geq c^\top p^*.
+\]
+Hence
+\[
+c^\top h\geq0 \qquad\text{for all }h\in\mathcal{D}.
+\]
+By the dual-cone form of Farkas' lemma, there exist
+$y\in\mathbb{R}^{n+m}$ and $s\in\mathbb{R}_+^{nm}$ such that
+\[c=A^\top y+s,\] with
+\[s_k=0\qquad\text{for every }k\in I.\]
+
+Write
+\[
+y=
+\begin{pmatrix}
+f^*\\g^*
+\end{pmatrix}.
+\]
+By the structure of the marginalconstraint matrix $A$,
+\[
+(A^\top y)_{ij}=f_i^*+g_j^*.
+\]
+It follows that
+\[
+C_{ij}=f_i^*+g_j^*+s_{ij},\qquad s_{ij}\geq0.
+\]
+Therefore
+\[
+f_i^*+g_j^*\leq C_{ij}\qquad\text{for all }i,j,
+\]
+so $(f^*,g^*)$ is dual feasible.
+
+Moreover, the definition of $I$ and the condition on $s$ imply
+\[
+s^\top p^*=0.
+\]
+Thus
+\[
+\begin{aligned}
+c^\top p^*
+&=(A^\top y+s)^\top p^*\\
+&=y^\top Ap^*+s^\top p^*\\
+&=y^\top d\\
+&=\langle a,f^*\rangle
++\langle b,g^*\rangle.
+\end{aligned}
+\]
+\end{proof}
+
+\subsection{Complementary Slackness}
+
+\begin{proposition}[Complementary slackness]
+\label{prop:complementary-slackness}
+Let $P^*\in U(a,b)$ be primal optimal, and let $(f^*,g^*)$ be dual optimal.
+Then\[P_{ij}^*(C_{ij}-f_i^*-g_j^*)=0\qquad\text{for all }i,j.\]
+Conversely, any primal feasible$P$ and dual feasible $(f,g)$satisfying these identitiesare both optimal.
+\end{proposition}
+
+\begin{proof}
+By strong duality,
+\[
+\langle C,P^*\rangle=\langle a,f^*\rangle+\langle b,g^*\rangle.
+\]
+Using the marginal constraints,we obtain
+\[
+\sum_{i,j}P_{ij}^*(C_{ij}-f_i^*-g_j^*)=0.\]
+Each term in this sum is nonnegative,because $P^*$ is primal feasible and $(f^*,g^*)$ is dual feasible.
+
+Therefore every term must vanish:\[P_{ij}^*(C_{ij}-f_i^*-g_j^*)=0.\]
+Conversely, suppose $P$ and $(f,g)$are feasible and satisfy these complementary slackness identities.
+Then
+\[
+\begin{aligned}
+\langle C,P\rangle
+&=\sum_{i,j}(f_i+g_j)P_{ij}\\
+&=\langle a,f\rangle+\langle b,g\rangle.
+\end{aligned}
+\]
+By weak duality, equality ofthe primal and dual objective valuesimplies that both solutions are optimal.
+\end{proof}
+
+
 \end{document}
