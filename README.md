@@ -21,3 +21,13 @@ M2 PT OGRE Research Project 2026–2027
 python3 -m venv .venv
 source .venv/bin/activate
 pip install -e ".[dev]"
+```
+
+## Phase 1 numerical tasks 1.1 and 1.2
+
+- [Solver](otlib/transport.py) computes the transport plan and dual prices.
+- [Notebook](notebooks/transport.ipynb) shows the examples, plot, and numerical results.
+- [Transport tests](tests/test_transport.py) check the plan, cost, and route count.
+
+Open the notebook with the environment where the package is installed.
+Run the transport tests from the repository root with `python3 -m pytest -q`.
