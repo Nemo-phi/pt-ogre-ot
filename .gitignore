@@ -35,3 +35,6 @@ proofs/build/
 *.synctex.gz
 *.bcf
 *.run.xml
+*.bbl
+*.out
+*.blg
