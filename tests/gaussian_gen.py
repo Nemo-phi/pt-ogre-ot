@@ -24,5 +24,5 @@ def gaussian_gen(m_a,sigma_a,m_b,sigma_b, N=1000, n=100):
     C = np.zeros((n,n))
     for i in range(n):
         for j in range(n):
-            C[i][j] = np.abs(x[i]-y[j])
+            C[i][j] = np.abs(x[i]-y[j])**2
     return a,x,b,y,C
