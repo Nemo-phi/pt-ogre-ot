@@ -81,34 +81,37 @@ def discrete_quantile(a, x, r):
     return x[i]
 
 
-def Wp_discrete(a,x,b,y,p):
+def Wp_discrete(a, x, b, y, p):
     """
-    a,b: histograms
-    x (resp. y): support of a (resp. b) in order i.e x[i] < x[i+1]
+    Compute the 1D Wasserstein distance using monotone coupling.
+    Assume x and y are sorted increasingly.
     """
-    n = a.size
-    m = b.size
-    F_a = 0
-    F_b = 0
-    i = 0
-    j = 0
-    I = 0
-    while (i < n) and (j < m):
-        if F_a + a[i] < F_b + b[j]:
-            F_a += a[i]
-            I += np.abs(x[i]-y[j])**p*np.abs(F_a-F_b)
+    a = np.asarray(a, dtype=float).copy()
+    b = np.asarray(b, dtype=float).copy()
+
+    if p < 1:
+        raise ValueError("p must be >= 1")
+
+    if not np.isclose(a.sum(), b.sum()):
+        raise ValueError("Total masses must agree")
+
+    i = j = 0
+    cost = 0.0
+
+    while i < len(a) and j < len(b):
+        mass = min(a[i], b[j])
+
+        cost += mass * abs(x[i] - y[j])**p
+
+        a[i] -= mass
+        b[j] -= mass
+
+        if a[i] <= 1e-14:
             i += 1
-        elif F_a + a[i] > F_b + b[j]:
-            F_b += b[j]
-            I += np.abs(x[i]-y[j])**p*np.abs(F_a-F_b)
+        if b[j] <= 1e-14:
             j += 1
-        else: #equality
-            F_a += a[i]
-            I += np.abs(x[i]-y[j])**p*np.abs(F_a-F_b)
-            i += 1
-            F_b += b[j]
-            j+=1    
-    return I**(1/p)
+
+    return cost**(1 / p)
 
 
 def Wp_continuous(C_inv_alpha, C_inv_beta, p, N):
